@@ -8,3 +8,9 @@
         {{$book->author}}
     </div>
 </div>
+
+@isset($links)
+    <div>
+        {{ $links }}
+    </div>
+@endisset

@@ -18,7 +18,11 @@
                     <h1 class="font-bold text-xl text-slate-600">{{App\Models\Pivot\BookUser::$statuses[$status]}}</h1>
                     <div class="mt-4 space-y-3">
                         @foreach ($books as $book)
-                            <x-book :book="$book"></x-book>
+                            <x-book :book="$book">
+                                <x-slot name="links">
+                                    Links
+                                </x-slot>
+                            </x-book>
                         @endforeach
                     </div>
                 </div>

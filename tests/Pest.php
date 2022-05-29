@@ -30,9 +30,15 @@ uses(Tests\TestCase::class)->in('Feature');
 */
 
 expect()->extend('toBeRedirectedFor', function (string $url, $method = 'get') {
-   return LaravelActingAs($this->value)
-        ->$method($url)
-        ->assertStatus(302);
+    $response = null;
+
+   if(!$this->value) {
+       $response = test()->{$method}($url)->assertStatus(302);
+   } else {
+    $response = actingAs($this->value)->{$method}($url);
+   }
+
+   return $response->assertStatus(302);
 });
 
 /*
@@ -49,4 +55,9 @@ expect()->extend('toBeRedirectedFor', function (string $url, $method = 'get') {
 function actingAs(Authenticatable $user)
 {
     return test()->actingAs($user);
+}
+
+function expectGuest()
+{
+    return test()->expect(null);
 }

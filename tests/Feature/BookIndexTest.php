@@ -14,41 +14,20 @@ beforeEach(function() {
     $this->user = User::factory()->create();
 });
 
-it('shows books the user wants to read', function () {
+it('shows books with the correct status', function ($status, $heading) {
     $this->user->books()->attach($book = Book::factory()->create(), [
-        'status' => 'WANT_TO_READ'
+        'status' => $status
     ]);
 
     actingAs($this->user)
         ->get('/')
-        ->assertSeeText('Want to read')
+        ->assertSeeText($heading)
         ->assertSeeText($book->title);
 
 
-});
-
-it('shows books the user is reading', function () {
-    $this->user->books()->attach($book = Book::factory()->create(), [
-        'status' => 'READING'
+})
+    ->with([
+        ['status' => 'WANT_TO_READ', 'heading' => 'Want to read'],
+        ['status' => 'READING', 'heading' => 'Reading'],
+        ['status' => 'READ', 'heading' => 'Read'],
     ]);
-
-    actingAs($this->user)
-        ->get('/')
-        ->assertSeeText('Reading')
-        ->assertSeeText($book->title);
-
-
-});
-
-it('shows books the user has read', function () {
-    $this->user->books()->attach($book = Book::factory()->create(), [
-        'status' => 'READ'
-    ]);
-
-    actingAs($this->user)
-        ->get('/')
-        ->assertSeeText('Read')
-        ->assertSeeText($book->title);
-
-
-});
